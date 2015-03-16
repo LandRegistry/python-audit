@@ -3,32 +3,46 @@ version: 1
 disable_existing_loggers: False
 
 formatters:
-    simple:
-        format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    audit:
+        format: "%(asctime)s  - %(name)s %(pathname)-12.12s#%(lineno)-5.5s %(funcName)-20.20s %(message)s"
 
 handlers:
+    logpath: logs
+
     console:
         class: logging.StreamHandler
         level: INFO
-        formatter: simple
+        formatter: audit
         stream: ext://sys.stdout
 
     info_file_handler:
-        class: logging.handlers.RotatingFileHandler
+        class: logging.handlers.TimedRotatingFileHandler
+        when: D
         level: INFO
-        formatter: simple
-        filename: logs/info.log
-        maxBytes: 500000
-        backupCount: 1
+        formatter: audit
+        filename:
+            (): setup_logging.get_log_path
+            name: info.log
         encoding: utf8
 
     error_file_handler:
-        class: logging.handlers.RotatingFileHandler
+        class: logging.handlers.TimedRotatingFileHandler
+        when: D
         level: ERROR
-        formatter: simple
-        filename: logs/errors.log
-        maxBytes: 500000
-        backupCount: 1
+        formatter: audit
+        filename:
+            (): setup_logging.get_log_path
+            name: errors.log
+        encoding: utf8
+
+    debug_file_handler:
+        class: logging.handlers.TimedRotatingFileHandler
+        when: D
+        level: DEBUG
+        formatter: audit
+        filename:
+            (): setup_logging.get_log_path
+            name: debug.log
         encoding: utf8
 
 loggers:
