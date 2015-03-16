@@ -20,9 +20,7 @@ handlers:
         when: D
         level: INFO
         formatter: audit
-        filename:
-            (): setup_logging.get_log_path
-            name: info.log
+        filename: logs/info.log
         encoding: utf8
 
     error_file_handler:
@@ -30,9 +28,7 @@ handlers:
         when: D
         level: ERROR
         formatter: audit
-        filename:
-            (): setup_logging.get_log_path
-            name: errors.log
+        filename: logs/errors.log
         encoding: utf8
 
     debug_file_handler:
@@ -40,9 +36,7 @@ handlers:
         when: D
         level: DEBUG
         formatter: audit
-        filename:
-            (): setup_logging.get_log_path
-            name: debug.log
+        filename: logs/debug.log
         encoding: utf8
 
 loggers:
