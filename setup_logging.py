@@ -2,7 +2,7 @@ import os
 import logging
 import logging.config
 import yaml
-import pdb
+
 
 def get_log_path(name=None):
 
@@ -13,7 +13,6 @@ def get_log_path(name=None):
 def setup_logging(default_cfg='logging.yaml', default_level=logging.INFO, env_key='LOG_CFG'):
     """Setup logging configuration. """
 
-    pdb.set_trace()
     directory = os.path.dirname(__file__)
     default_cfg_path = os.path.join(directory, default_cfg)
     cfg_path = os.getenv(env_key, default_cfg_path)

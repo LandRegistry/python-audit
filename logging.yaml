@@ -3,14 +3,17 @@ version: 1
 disable_existing_loggers: False
 
 formatters:
+    simple:
+        format: "%(asctime)s  - %(name)s %(message)s"
+
     audit:
-        format: "%(asctime)s  - %(name)s %(pathname)-12.12s#%(lineno)-5.5s %(funcName)-20.20s %(message)s"
+        format: "%(asctime)s  - %(name)-20s %(pathname)-60s #%(lineno)-5s %(funcName)-20s %(message)s"
 
 handlers:
     console:
         class: logging.StreamHandler
         level: INFO
-        formatter: audit
+        formatter: simple
         stream: ext://sys.stdout
 
     info_file_handler:
