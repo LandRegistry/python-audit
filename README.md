@@ -8,3 +8,7 @@ Common logging facility, for auditing purposes
 ## Pre-requisites
 
 * 'logs' directory needs to be present before use.
+
+## Usage
+
+```git submodule add ../python-logging logger```
