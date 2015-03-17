@@ -7,8 +7,6 @@ formatters:
         format: "%(asctime)s  - %(name)s %(pathname)-12.12s#%(lineno)-5.5s %(funcName)-20.20s %(message)s"
 
 handlers:
-    logpath: logs
-
     console:
         class: logging.StreamHandler
         level: INFO
