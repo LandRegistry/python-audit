@@ -4,8 +4,9 @@ import yaml
 import pdb
 
 def get_log_path(name=None):
-    log_path = os.getenv('LOG_PATH', 'logs')
-    # return log_path if name is None else os.path.join(log_path, name)
+
+    # 'logs' directory name is assumed - see "logging.yaml".
+    log_path = 'logs'
     return log_path if name is None else log_path + '/' + name
 
 def setup_logging(default_path='logging.yaml', default_level=logging.INFO, env_key='LOG_CFG'):
