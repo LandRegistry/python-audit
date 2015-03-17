@@ -43,13 +43,13 @@ handlers:
 loggers:
     application.server:
         level: INFO
-        handlers: [console, info_file_handler, error_file_handler]
+        handlers: [console, info_file_handler, error_file_handler, debug_file_handler]
         propagate: yes
     werkzeug:
         level: INFO
-        handlers: [console, info_file_handler, error_file_handler]
+        handlers: [console, info_file_handler, error_file_handler, debug_file_handler]
         propagate: no
 
 root:
     level: INFO
-    handlers: [console, info_file_handler, error_file_handler]
+    handlers: [console, info_file_handler, error_file_handler, debug_file_handler]
