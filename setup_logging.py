@@ -2,6 +2,24 @@ import os
 import logging
 import logging.config
 import yaml
+import pdb
+
+
+NAME = __name__ + '.audit'
+
+class AuditLogger(logging.getLoggerClass()):
+    """ Custom logging class, to ensure that audit log calls always succeed. """
+
+    def __init__(self, name=NAME):
+        """ Specify lowest level possible (above NOTSET), to avoid delegation to parent. """
+
+        pdb.set_trace()
+        super().__init__(name)
+        self._AUDIT = logging.CRITICAL + 10
+        logging.addLevelName(self._AUDIT, "AUDIT")
+
+    def audit(self, msg, *args, **kwargs):
+         self._log(self.AUDIT, msg, args, **kwargs)
 
 
 def get_log_path(name=None):
@@ -12,6 +30,8 @@ def get_log_path(name=None):
 
 def setup_logging(default_cfg='logging.yaml', default_level=logging.INFO, env_key='LOG_CFG'):
     """Setup logging configuration. """
+
+    logging.setLoggerClass(AuditLogger)
 
     directory = os.path.dirname(__file__)
     default_cfg_path = os.path.join(directory, default_cfg)

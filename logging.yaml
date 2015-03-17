@@ -40,6 +40,14 @@ handlers:
         filename: logs/debug.log
         encoding: utf8
 
+    audit_file_handler:
+        class: logging.handlers.TimedRotatingFileHandler
+        when: D
+        level: AUDIT
+        formatter: audit
+        filename: logs/debug.log
+        encoding: utf8
+
 loggers:
     application.server:
         level: INFO
