@@ -4,4 +4,7 @@ Common logging facility, for auditing purposes
 ## Dependecies
 
 * PaYaml
-* Log files assumed to reside in 'logs' directory.
+
+## Pre-requisites
+
+* 'logs' directory needs to be present before use.
