@@ -2,7 +2,6 @@ import os
 import logging
 import logging.config
 import yaml
-import pdb
 
 
 NAME = __name__ + '.audit'
@@ -13,7 +12,6 @@ class AuditLogger(logging.getLoggerClass()):
     def __init__(self, name=NAME):
         """ Specify lowest level possible (above NOTSET), to avoid delegation to parent. """
 
-        pdb.set_trace()
         super().__init__(name)
         self._AUDIT = logging.CRITICAL + 10
         logging.addLevelName(self._AUDIT, "AUDIT")
