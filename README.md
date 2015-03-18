@@ -12,3 +12,7 @@ Common logging facility, for auditing purposes
 ## Usage
 
 ```git submodule add ../python-logging logger```
+
+and (in a Python context) ...
+
+```from logger.setup_logging import setup_logging```
