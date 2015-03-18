@@ -1,4 +1,4 @@
-# python-logging
+# python_logging
 Common logging facility, for auditing purposes
 
 ## Dependecies
