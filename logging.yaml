@@ -43,21 +43,21 @@ handlers:
     audit_file_handler:
         class: logging.handlers.TimedRotatingFileHandler
         when: D
-        level: AUDIT
+        level: CRITICAL
         formatter: audit
-        filename: logs/debug.log
+        filename: logs/audit.log
         encoding: utf8
 
 loggers:
     application.server:
         level: INFO
-        handlers: [console, info_file_handler, error_file_handler, debug_file_handler]
+        handlers: [console, info_file_handler, error_file_handler, debug_file_handler, audit_file_handler]
         propagate: yes
     werkzeug:
         level: INFO
-        handlers: [console, info_file_handler, error_file_handler, debug_file_handler]
+        handlers: [console, info_file_handler, error_file_handler, debug_file_handler, audit_file_handler]
         propagate: no
 
 root:
     level: INFO
-    handlers: [console, info_file_handler, error_file_handler, debug_file_handler]
+    handlers: [console, info_file_handler, error_file_handler, debug_file_handler, audit_file_handler]

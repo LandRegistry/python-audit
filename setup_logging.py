@@ -13,11 +13,10 @@ class AuditLogger(logging.getLoggerClass()):
         """ Specify lowest level possible (above NOTSET), to avoid delegation to parent. """
 
         super().__init__(name)
-        self._AUDIT = logging.CRITICAL + 10
-        logging.addLevelName(self._AUDIT, "AUDIT")
 
     def audit(self, msg, *args, **kwargs):
-         self._log(self.AUDIT, msg, args, **kwargs)
+        msg = "[AUDIT] " + msg
+        self._log(logging.CRITICAL, msg, args, **kwargs)
 
 
 def get_log_path(name=None):
