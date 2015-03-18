@@ -4,14 +4,10 @@ import logging.config
 import yaml
 
 
-NAME = __name__ + '.audit'
-
 class AuditLogger(logging.getLoggerClass()):
     """ Custom logging class, to ensure that audit log calls always succeed. """
 
-    def __init__(self, name=NAME):
-        """ Specify lowest level possible (above NOTSET), to avoid delegation to parent. """
-
+    def __init__(self, name):
         super().__init__(name)
 
     def audit(self, msg, *args, **kwargs):
