@@ -3,6 +3,17 @@ import logging
 import logging.config
 import yaml
 
+class LevelFilter(logging.Filter):
+    def __init__(self, level=None):
+        super().__init__()
+        self.level = level
+
+    def filter(self, record):
+        if self.level is None:
+            allow = True
+        else:
+            allow = (self.level == record.levelname)
+        return allow
 
 class AuditLogger(logging.getLoggerClass()):
     """ Custom logging class, to ensure that audit log calls always succeed. """
@@ -12,6 +23,7 @@ class AuditLogger(logging.getLoggerClass()):
 
     def audit(self, msg, *args, **kwargs):
         msg = "[AUDIT] " + msg
+        super().critical(msg, *args, **kwargs)
         self._log(logging.CRITICAL, msg, args, **kwargs)
 
 
