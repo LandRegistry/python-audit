@@ -45,4 +45,3 @@ loggers:
 root:
     level: INFO
     handlers: [console, debug_file_handler, error_file_handler]
-    handlers: [console, debug_file_handler, error_file_handler]
