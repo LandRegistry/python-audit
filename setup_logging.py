@@ -19,6 +19,9 @@ class AuditLogger(logging.getLoggerClass()):
             setattr(logging, 'AUDIT', logging.CRITICAL * 10)
             logging.addLevelName(logging.AUDIT, 'AUDIT')
 
+        if not self.isEnabledFor(logging.AUDIT):
+            raise RuntimeError("logging.AUDIT level is disabled")
+
     def audit(self, msg, *args, **kwargs):
         """ Add AUDIT level and ensure that it is enabled. """
 
