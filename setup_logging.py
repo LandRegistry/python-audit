@@ -4,9 +4,13 @@ import logging.config
 import yaml
 
 class AuditLogger(logging.getLoggerClass()):
-    """ Custom logging class, to ensure that audit log calls always succeed. """
+    """ Custom logging class, to ensure that audit log calls always succeed.
+
+        Refer to super()._log() directly to ensure correct stack frame.
+    """
 
     def __init__(self, name):
+        # super() call is required here but 'logging.' preferred, as class may not have relevant functions etc.
         super().__init__(name)
 
         try:
@@ -16,10 +20,22 @@ class AuditLogger(logging.getLoggerClass()):
             logging.addLevelName(logging.AUDIT, 'AUDIT')
 
     def audit(self, msg, *args, **kwargs):
+        """ Add AUDIT level and ensure that it is enabled. """
+
+        # This code derived from logging.log() call.
         if self.isEnabledFor(logging.AUDIT):
-            self._log(logging.AUDIT, msg, args, **kwargs)
+            super()._log(logging.AUDIT, msg, args, **kwargs)
         else:
             raise RuntimeError("logging.AUDIT level is disabled")
+
+
+    def error(self, msg, *args, **kwargs):
+        """ Add exception details to error() call. """
+
+        # This code derived from logging.log() call.
+        if self.isEnabledFor(logging.ERROR):
+            kwargs["exc_info"] = True
+            super()._log(logging.ERROR, msg, args, **kwargs)
 
 
 def get_log_path(name=None):

@@ -9,6 +9,9 @@ formatters:
     debug:
         format: "%(levelname)-10s %(asctime)s  - %(name)-20s %(pathname)-60s #%(lineno)-5s %(funcName)-20s %(message)s"
 
+    error:
+        format: "%(levelname)-10s %(asctime)s  - %(name)-20s %(pathname)-60s #%(lineno)-5s %(funcName)-20s %(message)s\n%(exc_info)s"
+
 handlers:
     console:
         class: logging.StreamHandler
@@ -20,7 +23,7 @@ handlers:
         class: logging.handlers.TimedRotatingFileHandler
         when: D
         level: ERROR
-        formatter: debug
+        formatter: error
         filename: logs/errors.log
         encoding: utf8
 
