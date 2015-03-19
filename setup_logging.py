@@ -3,16 +3,23 @@ import logging
 import logging.config
 import yaml
 
-
 class AuditLogger(logging.getLoggerClass()):
     """ Custom logging class, to ensure that audit log calls always succeed. """
 
     def __init__(self, name):
         super().__init__(name)
 
+        try:
+            logging.getLevelName(logging.AUDIT)
+        except AttributeError as e:
+            setattr(logging, 'AUDIT', logging.CRITICAL * 10)
+            logging.addLevelName(logging.AUDIT, 'AUDIT')
+
     def audit(self, msg, *args, **kwargs):
-        msg = "[AUDIT] " + msg
-        self._log(logging.CRITICAL, msg, args, **kwargs)
+        if self.isEnabledFor(logging.AUDIT):
+            self._log(logging.AUDIT, msg, args, **kwargs)
+        else:
+            raise RuntimeError("logging.AUDIT level is disabled")
 
 
 def get_log_path(name=None):

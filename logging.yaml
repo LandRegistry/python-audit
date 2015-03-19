@@ -4,31 +4,23 @@ disable_existing_loggers: False
 
 formatters:
     simple:
-        format: "%(asctime)s  - %(name)s %(message)s"
+        format: "%(levelname)-10s %(asctime)s  - %(name)s %(message)s"
 
-    audit:
-        format: "%(asctime)s  - %(name)-20s %(pathname)-60s #%(lineno)-5s %(funcName)-20s %(message)s"
+    debug:
+        format: "%(levelname)-10s %(asctime)s  - %(name)-20s %(pathname)-60s #%(lineno)-5s %(funcName)-20s %(message)s"
 
 handlers:
     console:
         class: logging.StreamHandler
-        level: INFO
+        level: ERROR
         formatter: simple
         stream: ext://sys.stdout
-
-    info_file_handler:
-        class: logging.handlers.TimedRotatingFileHandler
-        when: D
-        level: INFO
-        formatter: audit
-        filename: logs/info.log
-        encoding: utf8
 
     error_file_handler:
         class: logging.handlers.TimedRotatingFileHandler
         when: D
         level: ERROR
-        formatter: audit
+        formatter: debug
         filename: logs/errors.log
         encoding: utf8
 
@@ -36,28 +28,20 @@ handlers:
         class: logging.handlers.TimedRotatingFileHandler
         when: D
         level: DEBUG
-        formatter: audit
+        formatter: debug
         filename: logs/debug.log
-        encoding: utf8
-
-    audit_file_handler:
-        class: logging.handlers.TimedRotatingFileHandler
-        when: D
-        level: CRITICAL
-        formatter: audit
-        filename: logs/audit.log
         encoding: utf8
 
 loggers:
     application.server:
         level: INFO
-        handlers: [console, info_file_handler, error_file_handler, debug_file_handler, audit_file_handler]
+        handlers: [console, debug_file_handler, error_file_handler]
         propagate: yes
     werkzeug:
         level: INFO
-        handlers: [console, info_file_handler, error_file_handler, debug_file_handler, audit_file_handler]
+        handlers: [console, debug_file_handler, error_file_handler]
         propagate: no
 
 root:
     level: INFO
-    handlers: [console, info_file_handler, error_file_handler, debug_file_handler, audit_file_handler]
+    handlers: [console, debug_file_handler, error_file_handler]
