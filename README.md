@@ -5,10 +5,6 @@ Common logging facility, for auditing purposes
 
 * PaYaml
 
-## Pre-requisites
-
-* 'logs' directory needs to be present before use.
-
 ## Usage
 
 ```git submodule add ../python_logging logger```
