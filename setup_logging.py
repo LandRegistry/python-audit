@@ -48,7 +48,10 @@ def get_log_path(name=None):
     return log_path if name is None else log_path + '/' + name
 
 
-def setup_logging(default_cfg='logging.yaml', default_level=logging.INFO, env_key='LOG_CFG'):
+directory = os.path.dirname(__file__)
+default_cfg_path = os.path.join(directory, 'logging.yaml')
+
+def setup_logging(default_cfg_path=default_cfg_path, default_level=logging.INFO, env_key='LOG_CFG'):
     """Setup logging configuration. """
 
     logging.setLoggerClass(AuditLogger)
@@ -60,8 +63,6 @@ def setup_logging(default_cfg='logging.yaml', default_level=logging.INFO, env_ke
     except OSError as e:
         pass
 
-    directory = os.path.dirname(__file__)
-    default_cfg_path = os.path.join(directory, default_cfg)
     cfg_path = os.getenv(env_key, default_cfg_path)
     if os.path.exists(cfg_path):
         with open(cfg_path, 'rt') as f:
