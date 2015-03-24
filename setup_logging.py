@@ -48,11 +48,13 @@ def get_log_path(name=None):
     return log_path if name is None else log_path + '/' + name
 
 
-directory = os.path.dirname(__file__)
-default_cfg_path = os.path.join(directory, 'logging.yaml')
-
-def setup_logging(default_cfg_path=default_cfg_path, default_level=logging.INFO, env_key='LOG_CFG'):
+def setup_logging(default_level=logging.INFO):
     """Setup logging configuration. """
+
+    log_path = os.getenv('LOGGING_PATH', None)
+    if log_path is None:
+        raise FileExistsError('Path to logging YAML not found.')
+
 
     logging.setLoggerClass(AuditLogger)
     logging.basicConfig(level=default_level)
@@ -63,8 +65,7 @@ def setup_logging(default_cfg_path=default_cfg_path, default_level=logging.INFO,
     except OSError as e:
         pass
 
-    cfg_path = os.getenv(env_key, default_cfg_path)
-    if os.path.exists(cfg_path):
-        with open(cfg_path, 'rt') as f:
+    if os.path.exists(log_path):
+        with open(log_path, 'rt') as f:
             config = yaml.load(f.read())
             logging.config.dictConfig(config)
