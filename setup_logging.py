@@ -28,8 +28,13 @@ def get_log_path(name=None):
     log_path = 'logs'
     return log_path if name is None else log_path + '/' + name
 
-def setup_logging(log_path='logging.yaml', default_level=logging.INFO, env_key='LOG_CFG'):
+def setup_logging(default_level=logging.INFO):
     """Setup logging configuration. """
+
+    log_path = os.getenv('LOGGING_PATH', None)
+    if log_path is None:
+        raise FileExistsError('Path to logging YAML not found.')
+
 
     logging.setLoggerClass(AuditLogger)
 
