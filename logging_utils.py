@@ -1,5 +1,5 @@
 import os
-##import pwd
+import pwd
 from application import app
 import yaml
 
@@ -8,8 +8,7 @@ import yaml
 
 def linux_user():
     try:
-        # return pwd.getpwuid(os.geteuid()).pw_name
-        return 'guest'
+        return pwd.getpwuid(os.geteuid()).pw_name
     except Exception as err:
         return "failed to get user: %s" % err
 
