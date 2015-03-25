@@ -4,9 +4,13 @@ import logging.config
 import yaml
 
 class AuditLogger(logging.getLoggerClass()):
-    """ Custom logging class, to ensure that audit log calls always succeed. """
+    """ Custom logging class, to ensure that audit log calls always succeed.
+
+        Refer to super()._log() directly to ensure correct stack frame.
+    """
 
     def __init__(self, name):
+        # super() call is required here but 'logging.' preferred, as class may not have relevant functions etc.
         super().__init__(name)
 
         try:
@@ -15,11 +19,28 @@ class AuditLogger(logging.getLoggerClass()):
             setattr(logging, 'AUDIT', logging.CRITICAL * 10)
             logging.addLevelName(logging.AUDIT, 'AUDIT')
 
+        if not self.isEnabledFor(logging.AUDIT):
+            raise RuntimeError("logging.AUDIT level is disabled")
+
     def audit(self, msg, *args, **kwargs):
+        """ Add AUDIT level and ensure that it is enabled. """
+
+        # This code derived from logging.log() call.
         if self.isEnabledFor(logging.AUDIT):
-            self._log(logging.AUDIT, msg, args, **kwargs)
+            super()._log(logging.AUDIT, msg, args, **kwargs)
         else:
             raise RuntimeError("logging.AUDIT level is disabled")
+
+    #This class is intended to enhance the existing error class to
+    #include a stack trace.  However, it doesn't work.  Commented out
+    #for now, and explicitly add stack traces in error situations.
+    # def error(self, msg, *args, **kwargs):
+    #     """ Add exception details to error() call. """
+    #
+    #     # This code derived from logging.log() call.
+    #     if self.isEnabledFor(logging.ERROR):
+    #         kwargs["exc_info"] = True
+    #         super()._log(logging.ERROR, msg, args, **kwargs)
 
 
 def get_log_path(name=None):
@@ -27,6 +48,7 @@ def get_log_path(name=None):
     # 'logs' directory name is assumed - see "logging.yaml".
     log_path = 'logs'
     return log_path if name is None else log_path + '/' + name
+
 
 def setup_logging(default_level=logging.INFO):
     """Setup logging configuration. """
@@ -38,17 +60,15 @@ def setup_logging(default_level=logging.INFO):
     #
 
     logging.setLoggerClass(AuditLogger)
+    logging.basicConfig(level=default_level)
+
+    # Make sure that directory for logs exists.
+    try:
+        os.mkdir(get_log_path())
+    except OSError as e:
+        pass
 
     if os.path.exists(log_path):
         with open(log_path, 'rt') as f:
             config = yaml.load(f.read())
-
-        # Make sure that directory for logs exists.
-        try:
-            os.mkdir(get_log_path())
-        except OSError as e:
-            pass
-
-        logging.config.dictConfig(config)
-    else:
-        logging.basicConfig(level=default_level)
+            logging.config.dictConfig(config)
