@@ -42,7 +42,7 @@ class TestCentralLogger(unittest.TestCase):
     def test_setup_again_without_cfg(self):
         """ BasicConfig """
 
-        setup_logging.setup_logging(default_cfg_path='XXX')
+        setup_logging.setup_logging()
         self.logger = logging.getLogger(__name__)
         assert self.logger.isEnabledFor(logging.INFO) == True
 
