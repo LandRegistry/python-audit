@@ -32,15 +32,6 @@ class AuditLogger(logging.getLoggerClass()):
             raise RuntimeError("logging.AUDIT level is disabled")
 
 
-    def error(self, msg, *args, **kwargs):
-        """ Add exception details to error() call. """
-
-        # This code derived from logging.log() call.
-        if self.isEnabledFor(logging.ERROR):
-            kwargs["exc_info"] = True
-            super()._log(logging.ERROR, msg, args, **kwargs)
-
-
 def get_log_path(name=None):
 
     # 'logs' directory name is assumed - see "logging.yaml".
