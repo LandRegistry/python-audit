@@ -10,8 +10,8 @@ class AuditLogger(logging.getLoggerClass()):
     """
 
     def __init__(self, name):
-        # super() call is required here but 'logging.' preferred, as class may not have relevant functions etc.
-        super().__init__(name)
+        # super() call is preferred but we need to cater for Python 2 usage as well.
+        super(AuditLogger, self).__init__(name)
 
         try:
             logging.getLevelName(logging.AUDIT)
@@ -27,7 +27,7 @@ class AuditLogger(logging.getLoggerClass()):
 
         # This code derived from logging.log() call.
         if self.isEnabledFor(logging.AUDIT):
-            super()._log(logging.AUDIT, msg, args, **kwargs)
+            super(AuditLogger, self)._log(logging.AUDIT, msg, args, **kwargs)
         else:
             raise RuntimeError("logging.AUDIT level is disabled")
 
