@@ -31,17 +31,6 @@ class AuditLogger(logging.getLoggerClass()):
         else:
             raise RuntimeError("logging.AUDIT level is disabled")
 
-    #This class is intended to enhance the existing error class to
-    #include a stack trace.  However, it doesn't work.  Commented out
-    #for now, and explicitly add stack traces in error situations.
-    # def error(self, msg, *args, **kwargs):
-    #     """ Add exception details to error() call. """
-    #
-    #     # This code derived from logging.log() call.
-    #     if self.isEnabledFor(logging.ERROR):
-    #         kwargs["exc_info"] = True
-    #         super()._log(logging.ERROR, msg, args, **kwargs)
-
 
 def get_log_path(name=None):
 
