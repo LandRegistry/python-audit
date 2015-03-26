@@ -11,4 +11,4 @@ Common logging facility, for auditing purposes
 
 and (in a Python context) ...
 
-```from logger.setup_logging import setup_logging```
+```from python_logging.setup_logging import setup_logging```
