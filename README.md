@@ -7,7 +7,7 @@ Common logging facility, for auditing purposes
 
 ## Usage
 
-```git submodule add ../python_logging logger```
+```git submodule add ../python_logging```
 
 and (in a Python context) ...
 
