@@ -4,13 +4,14 @@ disable_existing_loggers: False
 
 formatters:
     simple:
-        format: "%(levelname)-10s %(asctime)s  - %(name)s %(message)s"
+        format: "%(process)d %(levelname)-10s %(asctime)s  - %(name)-20s %(message)s"
 
     debug:
-        format: "%(levelname)-10s %(asctime)s  - %(name)-20s %(pathname)-60s #%(lineno)-5s %(funcName)-20s %(message)s"
+        format: "%(process)d %(levelname)-10s %(asctime)s  - %(name)-20s %(pathname)-60s #%(lineno)-5s %(funcName)-20s %(message)s"
 
+    # The 'exc_info' part is relevant with the logging.exception() call.
     error:
-        format: "%(levelname)-10s %(asctime)s  - %(name)-20s %(pathname)-60s #%(lineno)-5s %(funcName)-20s %(message)s\n%(exc_info)s"
+        format: "%(process)d %(levelname)-10s %(asctime)s  - %(name)-20s %(pathname)-60s #%(lineno)-5s %(funcName)-20s %(message)s\n%(exc_info)s"
 
 handlers:
     console:
