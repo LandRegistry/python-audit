@@ -13,6 +13,11 @@ formatters:
     error:
         format: "%(process)d %(levelname)-10s %(asctime)s  - %(name)-20s %(pathname)-60s #%(lineno)-5s %(funcName)-20s %(message)s\n%(exc_info)s"
 
+filters:
+    level_filter:
+        (): ext://setup_logging.LevelFilter
+        level: ERROR
+
 handlers:
     console:
         class: logging.StreamHandler
@@ -26,6 +31,7 @@ handlers:
         level: ERROR
         formatter: error
         filename: logs/errors.log
+        filters: [level_filter]
         encoding: utf8
 
     debug_file_handler:
