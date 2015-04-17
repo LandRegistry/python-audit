@@ -58,7 +58,7 @@ def setup_logging(default_level=logging.INFO):
         pass
 
     # Get configuration file; default is located in *this* module's directory.
-    yaml_dir = os.path.abspath(os.path.dirname(__name__))
+    yaml_dir = os.path.dirname(__file__)
     yaml_path = os.getenv('LOGGING_YAML', os.path.join(yaml_dir, 'logging.yaml'))
 
     if os.path.exists(yaml_path):

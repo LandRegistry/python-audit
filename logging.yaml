@@ -4,18 +4,19 @@ disable_existing_loggers: False
 
 formatters:
     simple:
-        format: "%(process)d %(levelname)-10s %(asctime)s  - %(name)-20s %(message)s"
+        format: "%(process)-6d %(levelname)-10s %(asctime)s  - %(name)-20s %(message)s"
 
     debug:
-        format: "%(process)d %(levelname)-10s %(asctime)s  - %(name)-20s %(pathname)-60s #%(lineno)-5s %(funcName)-20s %(message)s"
+        format: "%(process)-6d %(levelname)-10s %(asctime)s  - %(name)-20s %(pathname)-60s #%(lineno)-5s %(funcName)-20s %(message)s"
 
     # The 'exc_info' part is relevant with the logging.exception() call.
     error:
-        format: "%(process)d %(levelname)-10s %(asctime)s  - %(name)-20s %(pathname)-60s #%(lineno)-5s %(funcName)-20s %(message)s\n%(exc_info)s"
+        format: "%(process)-6d %(levelname)-10s %(asctime)s  - %(name)-20s %(pathname)-60s #%(lineno)-5s %(funcName)-20s %(message)s\n%(exc_info)s"
 
 filters:
     level_filter:
-        (): ext://setup_logging.LevelFilter
+        # See https://docs.python.org/3.4/library/logging.config.html#user-defined-objects for specification.
+        (): ext://python_logging.setup_logging.LevelFilter
         level: ERROR
 
 handlers:
