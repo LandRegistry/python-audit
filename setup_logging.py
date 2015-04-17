@@ -14,8 +14,9 @@ class LevelFilter(object):
         self.__level = logging.getLevelName(level)
         assert isinstance(self.__level, int), "Level should be string"
 
-    def filter(self, logRecord):
-        return logRecord.levelno == self.__level
+    def filter(self, log_record):
+        return log_record.levelno == self.__level
+
 
 class AuditLogger(logging.getLoggerClass()):
     """ Custom logging class, to ensure that audit log calls always succeed.
@@ -29,7 +30,7 @@ class AuditLogger(logging.getLoggerClass()):
 
         try:
             logging.getLevelName(logging.AUDIT)
-        except AttributeError as e:
+        except AttributeError:
             setattr(logging, 'AUDIT', logging.CRITICAL * 10)
             logging.addLevelName(logging.AUDIT, 'AUDIT')
 
@@ -50,12 +51,14 @@ def setup_logging(default_level=logging.INFO):
     """Setup logging configuration. """
 
     # Make sure that directory for logs exists, before loading YAML file.
+    # N.B.: this is relative to invoking module.
     try:
         os.mkdir(LOGS_DIR)
-    except OSError as e:
+    except OSError:
         pass
 
-    yaml_dir = os.path.abspath(os.path.dirname(sys.argv[0]))
+    # Get configuration file; default is located in *this* module's directory.
+    yaml_dir = os.path.abspath(os.path.dirname(__name__))
     yaml_path = os.getenv('LOGGING_YAML', os.path.join(yaml_dir, 'logging.yaml'))
 
     if os.path.exists(yaml_path):
@@ -63,7 +66,7 @@ def setup_logging(default_level=logging.INFO):
             config = yaml.load(f.read())
             logging.config.dictConfig(config)
     else:
-        raise FileNotFoundError(log_path)
+        raise FileNotFoundError(yaml_path)
 
     logging.setLoggerClass(AuditLogger)
     logging.basicConfig(level=default_level)
