@@ -1,7 +1,22 @@
 import os
+import sys
 import logging
 import logging.config
 import yaml
+
+LOGS_DIR = 'logs'
+
+
+# This filter is defined here, for reference within the 'logging.yaml' configuration file.
+class LevelFilter(object):
+    def __init__(self, level):
+        # Get logging level for give name; note that getLevelName can return either int or str!
+        self.__level = logging.getLevelName(level)
+        assert isinstance(self.__level, int), "Level should be string"
+
+    def filter(self, log_record):
+        return log_record.levelno == self.__level
+
 
 class AuditLogger(logging.getLoggerClass()):
     """ Custom logging class, to ensure that audit log calls always succeed.
@@ -15,7 +30,7 @@ class AuditLogger(logging.getLoggerClass()):
 
         try:
             logging.getLevelName(logging.AUDIT)
-        except AttributeError as e:
+        except AttributeError:
             setattr(logging, 'AUDIT', logging.CRITICAL * 10)
             logging.addLevelName(logging.AUDIT, 'AUDIT')
 
@@ -32,32 +47,26 @@ class AuditLogger(logging.getLoggerClass()):
             raise RuntimeError("logging.AUDIT level is disabled")
 
 
-def get_log_path(name=None):
-
-    # 'logs' directory name is assumed - see "logging.yaml".
-    log_path = 'logs'
-    return log_path if name is None else log_path + '/' + name
-
-
 def setup_logging(default_level=logging.INFO):
     """Setup logging configuration. """
 
-    log_path = os.getenv('LOGGING_PATH', 'python_logging/logging.yaml')
-    
-    # if log_path is None:
-    #     raise FileExistsError('Path to logging YAML not found.')
-    #
+    # Make sure that directory for logs exists, before loading YAML file.
+    # N.B.: this is relative to invoking module.
+    try:
+        os.mkdir(LOGS_DIR)
+    except OSError:
+        pass
+
+    # Get configuration file; default is located in *this* module's directory.
+    yaml_dir = os.path.abspath(os.path.dirname(__name__))
+    yaml_path = os.getenv('LOGGING_YAML', os.path.join(yaml_dir, 'logging.yaml'))
+
+    if os.path.exists(yaml_path):
+        with open(yaml_path, 'rt') as f:
+            config = yaml.load(f.read())
+            logging.config.dictConfig(config)
+    else:
+        raise FileNotFoundError(yaml_path)
 
     logging.setLoggerClass(AuditLogger)
     logging.basicConfig(level=default_level)
-
-    # Make sure that directory for logs exists.
-    try:
-        os.mkdir(get_log_path())
-    except OSError as e:
-        pass
-
-    if os.path.exists(log_path):
-        with open(log_path, 'rt') as f:
-            config = yaml.load(f.read())
-            logging.config.dictConfig(config)
