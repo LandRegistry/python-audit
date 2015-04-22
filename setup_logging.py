@@ -10,9 +10,10 @@ LOGS_DIR = 'logs'
 # This filter is defined here, for reference within the 'logging.yaml' configuration file.
 class LevelFilter(object):
     def __init__(self, level):
-        # Get logging level for give name; note that getLevelName can return either int or str!
-        self.__level = logging.getLevelName(level)
-        assert isinstance(self.__level, int), "Level should be string"
+        try:
+            self.__level = logging._nameToLevel[level]
+        except KeyError:
+            raise ValueError("Invalid level name")
 
     def filter(self, log_record):
         return log_record.levelno == self.__level
