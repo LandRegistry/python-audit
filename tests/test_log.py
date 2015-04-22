@@ -10,7 +10,7 @@ class TestCentralLogger(unittest.TestCase):
     def setUp(self):
 
         # Remove 'logs' directory.
-        self.logs_dir = setup_logging.get_log_path()
+        self.logs_dir = setup_logging.LOGS_DIR
         shutil.rmtree(self.logs_dir, ignore_errors=True)
 
         # Standard LR configuration.
