@@ -19,3 +19,7 @@ To add to a new repo:
 and (in a Python context) ...
 
 ```from python_logging.setup_logging import setup_logging```
+
+## Design Notes
+
+* See https://github.com/LandRegistry/python_logging/wiki#design-notes.
